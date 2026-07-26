@@ -1,241 +1,2201 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SIGACTPAR - Sistema Integrado de Gestão de Atendimentos do Conselho Tutelar do Paranoá">
-    <title>SIGACTPAR | Sistema Integrado de Gestão do Conselho Tutelar</title>
+    <title>Conselho Tutelar - Sistema de Gestão</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <!-- Favicon -->
-    <link rel="icon" href="img/favicon.ico">
+        :root {
+            --primary: #1a237e;
+            --primary-dark: #0d1b5e;
+            --primary-light: #283593;
+            --secondary: #ff6f00;
+            --secondary-light: #ffab00;
+            --bg: #f4f6f9;
+            --card-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            --radius: 10px;
+            --transition: all 0.3s ease;
+        }
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: #2d2d2d;
+            display: flex;
+            min-height: 100vh;
+        }
 
-    <!-- Chart.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #0d1b5e 0%, #1a237e 50%, #283593 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+        }
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/sidebar.css">
-    <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/dashboard.css">
-    <link rel="stylesheet" href="css/cards.css">
-    <link rel="stylesheet" href="css/formularios.css">
-    <link rel="stylesheet" href="css/tabelas.css">
-    <link rel="stylesheet" href="css/modais.css">
-    <link rel="stylesheet" href="css/footer.css">
-    <link rel="stylesheet" href="css/responsivo.css">
+        .sidebar-brand {
+            padding: 25px 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            text-align: center;
+        }
+
+        .sidebar-brand .logo-icon {
+            font-size: 32px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .sidebar-brand h1 {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: #fff;
+        }
+
+        .sidebar-brand .subtitle {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 2px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .sidebar-menu {
+            padding: 15px 0;
+        }
+
+        .sidebar-menu .menu-label {
+            padding: 10px 25px 5px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            opacity: 0.5;
+            font-weight: 600;
+        }
+
+        .sidebar-menu .menu-item {
+            padding: 12px 25px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border-left: 3px solid transparent;
+            margin: 2px 10px;
+            border-radius: 8px;
+        }
+
+        .sidebar-menu .menu-item:hover {
+            background: rgba(255,255,255,0.08);
+            border-left-color: rgba(255,255,255,0.3);
+        }
+
+        .sidebar-menu .menu-item.active {
+            background: rgba(255,255,255,0.12);
+            border-left-color: var(--secondary-light);
+        }
+
+        .sidebar-menu .menu-item .icon {
+            font-size: 18px;
+            width: 28px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .sidebar-menu .menu-item .label {
+            font-size: 14px;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .sidebar-menu .menu-item .badge {
+            background: rgba(255,255,255,0.15);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 15px 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 11px;
+            opacity: 0.5;
+            text-align: center;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 20px 25px;
+            min-height: 100vh;
+        }
+
+        /* ===== TOPBAR ===== */
+        .topbar {
+            background: white;
+            padding: 12px 25px;
+            border-radius: var(--radius);
+            margin-bottom: 25px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar .page-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .topbar .page-title span {
+            font-weight: 300;
+            color: #888;
+            font-size: 14px;
+        }
+
+        .topbar .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .topbar .topbar-actions .date-display {
+            font-size: 13px;
+            color: #666;
+            background: var(--bg);
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+
+        .topbar .topbar-actions .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .topbar .topbar-actions .notification {
+            position: relative;
+            cursor: pointer;
+            font-size: 20px;
+            color: #666;
+        }
+
+        .topbar .topbar-actions .notification .dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background: #e53935;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        /* ===== SECTIONS ===== */
+        .section {
+            display: none;
+            animation: fadeSlide 0.4s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 22px 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0f2f5;
+        }
+
+        .card .card-header h2 {
+            color: var(--primary);
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .card .card-header .card-badge {
+            background: var(--primary);
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* ===== FORMULÁRIO ===== */
+        .form-container {
+            border: 1px solid #e8ecf1;
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .form-header-bar {
+            background: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-header-bar .form-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-header-bar .form-year {
+            background: rgba(255,255,255,0.15);
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .form-body {
+            padding: 22px 25px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .form-row .label {
+            font-weight: 600;
+            color: #444;
+            min-width: 170px;
+            font-size: 13px;
+        }
+
+        .form-row .label .required {
+            color: #e53935;
+            margin-left: 2px;
+        }
+
+        .form-row .field {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .form-row .field input,
+        .form-row .field select,
+        .form-row .field textarea {
+            width: 100%;
+            padding: 9px 14px;
+            border: 1.5px solid #e0e4ea;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: var(--transition);
+            background: #fafbfc;
+            font-family: inherit;
+        }
+
+        .form-row .field input:focus,
+        .form-row .field select:focus,
+        .form-row .field textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26,35,126,0.08);
+            background: white;
+        }
+
+        .form-row .field input[type="number"] {
+            width: 60px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .form-row .field .date-separator {
+            padding: 0 5px;
+            color: #999;
+            font-weight: 600;
+        }
+
+        .form-row .field .date-group {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .form-row .field textarea {
+            min-height: 70px;
+            resize: vertical;
+        }
+
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 4px 0;
+        }
+
+        .checkbox-group label,
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            color: #444;
+        }
+
+        .checkbox-group label input[type="checkbox"],
+        .radio-group label input[type="radio"] {
+            width: 17px;
+            height: 17px;
+            cursor: pointer;
+            accent-color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .checkbox-group label input[type="text"],
+        .radio-group label input[type="text"] {
+            width: 140px;
+            padding: 5px 10px;
+            border: 1.5px solid #e0e4ea;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-left: 2px;
+        }
+
+        .checkbox-group label input[type="text"]:focus,
+        .radio-group label input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-divider {
+            border: none;
+            border-top: 2px dashed #e8ecf1;
+            margin: 18px 0;
+        }
+
+        /* ===== BUTTONS ===== */
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-success {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #1b5e20;
+        }
+
+        .btn-warning {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #e65100;
+        }
+
+        .btn-info {
+            background: #00838f;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #006064;
+        }
+
+        .btn-danger {
+            background: #c62828;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #b71c1c;
+        }
+
+        .btn-secondary {
+            background: #78909c;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #546e7a;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 12px;
+        }
+
+        /* ===== DASHBOARD ===== */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 18px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--card-shadow);
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .stat-card .stat-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .stat-card .stat-label {
+            font-size: 12px;
+            color: #888;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 2px 0;
+        }
+
+        .stat-card .stat-change {
+            font-size: 11px;
+            color: #2e7d32;
+        }
+
+        .stat-card.green { border-left-color: #2e7d32; }
+        .stat-card.green .stat-number { color: #2e7d32; }
+        .stat-card.orange { border-left-color: #f57c00; }
+        .stat-card.orange .stat-number { color: #f57c00; }
+        .stat-card.purple { border-left-color: #6a1b9a; }
+        .stat-card.purple .stat-number { color: #6a1b9a; }
+        .stat-card.red { border-left-color: #c62828; }
+        .stat-card.red .stat-number { color: #c62828; }
+        .stat-card.teal { border-left-color: #00695c; }
+        .stat-card.teal .stat-number { color: #00695c; }
+
+        /* ===== CHARTS ===== */
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .chart-box {
+            background: white;
+            padding: 18px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--card-shadow);
+        }
+
+        .chart-box .chart-title {
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bar-item .bar-label {
+            min-width: 85px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #444;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .bar-item .bar-track {
+            flex: 1;
+            height: 22px;
+            background: #f0f2f5;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-item .bar-track .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.8s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 6px;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .bar-fill.blue { background: linear-gradient(90deg, #1a237e, #283593); }
+        .bar-fill.green { background: linear-gradient(90deg, #1b5e20, #2e7d32); }
+        .bar-fill.orange { background: linear-gradient(90deg, #e65100, #f57c00); }
+        .bar-fill.purple { background: linear-gradient(90deg, #4a148c, #6a1b9a); }
+        .bar-fill.red { background: linear-gradient(90deg, #b71c1c, #c62828); }
+        .bar-fill.teal { background: linear-gradient(90deg, #004d40, #00695c); }
+
+        /* ===== TABLES ===== */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        table thead {
+            background: var(--primary);
+            color: white;
+        }
+
+        table th {
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f0f2f5;
+            vertical-align: middle;
+        }
+
+        table tbody tr:hover {
+            background: #f8f9fc;
+        }
+
+        table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-badge.atendido { background: #e8f5e9; color: #2e7d32; }
+        .status-badge.pendente { background: #fff3e0; color: #e65100; }
+        .status-badge.andamento { background: #e3f2fd; color: #0d47a1; }
+        .status-badge.aberto { background: #fce4ec; color: #c62828; }
+
+        /* ===== SEARCH ===== */
+        .search-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-bar input,
+        .search-bar select {
+            padding: 9px 16px;
+            border: 1.5px solid #e0e4ea;
+            border-radius: 8px;
+            font-size: 13px;
+            transition: var(--transition);
+            background: #fafbfc;
+        }
+
+        .search-bar input:focus,
+        .search-bar select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .search-bar input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-bar select {
+            min-width: 150px;
+        }
+
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 28px 32px;
+            border-radius: 12px;
+            max-width: 520px;
+            width: 95%;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: modalIn 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.92) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-content .modal-title {
+            color: var(--primary);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-content .modal-desc {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .file-upload-area {
+            border: 2px dashed #d0d5dd;
+            padding: 35px 20px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--primary);
+            background: #f8f9fc;
+        }
+
+        .file-upload-area .upload-icon {
+            font-size: 42px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .file-upload-area .upload-text {
+            font-weight: 500;
+            color: #444;
+        }
+
+        .file-upload-area .upload-hint {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .file-upload-area input {
+            display: none;
+        }
+
+        /* ===== MOBILE ===== */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 14px;
+            left: 14px;
+            z-index: 1001;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 999;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 14px;
+                padding-top: 65px;
+            }
+
+            .topbar {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+                padding: 14px 18px;
+            }
+
+            .topbar .topbar-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .form-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 4px;
+            }
+
+            .form-row .label {
+                min-width: auto;
+                font-size: 13px;
+            }
+
+            .form-row .field .date-group {
+                flex-wrap: wrap;
+            }
+
+            .form-row .field input[type="number"] {
+                width: 55px;
+            }
+
+            .checkbox-group,
+            .radio-group {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .chart-container {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .form-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .search-bar input,
+            .search-bar select {
+                width: 100%;
+            }
+
+            .stat-card .stat-number {
+                font-size: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-body {
+                padding: 14px 16px;
+            }
+
+            .card {
+                padding: 16px 18px;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f0f2f5;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ===== UTILITY ===== */
+        .text-center { text-align: center; }
+        .text-muted { color: #999; }
+        .mt-10 { margin-top: 10px; }
+        .mb-10 { margin-bottom: 10px; }
+        .flex { display: flex; }
+        .flex-center { display: flex; align-items: center; gap: 8px; }
+        .gap-5 { gap: 5px; }
+        .gap-10 { gap: 10px; }
+
+        /* ===== REPORT OUTPUT ===== */
+        .report-output {
+            background: #f8f9fc;
+            padding: 20px;
+            border-radius: var(--radius);
+            min-height: 100px;
+            border: 1px solid #e8ecf1;
+            margin-top: 18px;
+        }
+
+        .report-output .report-placeholder {
+            color: #999;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .report-grid .report-stat {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .report-grid .report-stat .rs-number {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .report-grid .report-stat .rs-label {
+            font-size: 11px;
+            color: #888;
+            margin-top: 2px;
+        }
+    </style>
 </head>
+<body>
+    <!-- ===== MENU TOGGLE ===== -->
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
-<body data-theme="light">
+    <!-- ===== SIDEBAR ===== -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <span class="logo-icon">🏛️</span>
+            <h1>Conselho Tutelar</h1>
+            <div class="subtitle">SISTEMA DE GESTÃO</div>
+        </div>
+        <div class="sidebar-menu">
+            <div class="menu-label">Navegação</div>
+            <div class="menu-item active" onclick="showSection('dashboard')">
+                <span class="icon">📊</span>
+                <span class="label">Dashboard</span>
+                <span class="badge" id="menuTotal">0</span>
+            </div>
+            <div class="menu-item" onclick="showSection('cadastro')">
+                <span class="icon">📝</span>
+                <span class="label">Atendimento</span>
+            </div>
+            <div class="menu-item" onclick="showSection('atendimentos')">
+                <span class="icon">📋</span>
+                <span class="label">Histórico</span>
+                <span class="badge" id="menuAtendimentos">0</span>
+            </div>
+            <div class="menu-item" onclick="showSection('pessoas')">
+                <span class="icon">👤</span>
+                <span class="label">Pessoas</span>
+                <span class="badge" id="menuPessoas">0</span>
+            </div>
+            <div class="menu-item" onclick="showSection('relatorios')">
+                <span class="icon">📈</span>
+                <span class="label">Relatórios</span>
+            </div>
+        </div>
+        <div class="sidebar-footer">
+            <span>v2.0 • 2026</span>
+        </div>
+    </nav>
 
-    <!-- ==========================================================
-                                LAYOUT
-    =========================================================== -->
-    <div class="layout">
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-content">
 
-        <!-- ==========================================================
-                                    SIDEBAR
-        =========================================================== -->
-        <aside class="sidebar" id="sidebar">
-            <div class="logo">
-                <i class="fa-solid fa-scale-balanced"></i>
-                <div>
-                    <h2>SIGACTPAR</h2>
-                    <span>Conselho Tutelar do Paranoá</span>
+        <!-- ===== TOPBAR ===== -->
+        <div class="topbar">
+            <div class="page-title">
+                <span id="pageTitle">📊 Dashboard</span>
+            </div>
+            <div class="topbar-actions">
+                <span class="date-display" id="dataAtual"></span>
+                <span class="notification">
+                    🔔
+                    <span class="dot"></span>
+                </span>
+                <div class="avatar">CT</div>
+            </div>
+        </div>
+
+        <div class="container">
+
+            <!-- ===== DASHBOARD ===== -->
+            <div id="dashboard" class="section active">
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-label">Atendimentos Hoje</div>
+                        <div class="stat-number" id="hojeCount">0</div>
+                        <div class="stat-change">⬆️ Atualizado</div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="stat-icon">📆</div>
+                        <div class="stat-label">Atendimentos no Mês</div>
+                        <div class="stat-number" id="mesCount">0</div>
+                        <div class="stat-change">📈 Este mês</div>
+                    </div>
+                    <div class="stat-card orange">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-label">Atendimentos no Ano</div>
+                        <div class="stat-number" id="anoCount">0</div>
+                        <div class="stat-change">📈 Este ano</div>
+                    </div>
+                    <div class="stat-card purple">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-label">Total de Cadastros</div>
+                        <div class="stat-number" id="totalCount">0</div>
+                        <div class="stat-change">📋 Registros</div>
+                    </div>
+                    <div class="stat-card red">
+                        <div class="stat-icon">👤</div>
+                        <div class="stat-label">Pessoas Únicas</div>
+                        <div class="stat-number" id="pessoasUnicas">0</div>
+                        <div class="stat-change">🔍 Atendidas</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <div class="chart-title">📋 Assuntos Mais Frequentes</div>
+                        <div id="assuntosChart" class="bar-chart"></div>
+                    </div>
+                    <div class="chart-box">
+                        <div class="chart-title">📍 Atendimentos por Cidade</div>
+                        <div id="cidadesChart" class="bar-chart"></div>
+                    </div>
+                    <div class="chart-box">
+                        <div class="chart-title">⚠️ Violações Registradas</div>
+                        <div id="violacoesChart" class="bar-chart"></div>
+                    </div>
+                    <div class="chart-box">
+                        <div class="chart-title">👤 Distribuição por Gênero</div>
+                        <div id="generoChart" class="bar-chart"></div>
+                    </div>
                 </div>
             </div>
 
-            <!-- ======================================================
-                                        MENU
-            ======================================================= -->
-            <nav class="menu">
-                <ul>
-                    <li class="ativo">
-                        <a href="#" data-page="dashboard" title="Dashboard">
-                            <i class="fa-solid fa-house"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-page="atendimentos" title="Atendimentos">
-                            <i class="fa-solid fa-file-lines"></i>
-                            <span>Atendimentos</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-page="criancas" title="Crianças e Adolescentes">
-                            <i class="fa-solid fa-child"></i>
-                            <span>Crianças e Adolescentes</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-page="responsaveis" title="Responsáveis">
-                            <i class="fa-solid fa-people-group"></i>
-                            <span>Responsáveis</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-page="processos" title="Processos">
-                            <i class="fa-solid fa-folder-open"></i>
-                            <span>Processos</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-page="agenda" title="Agenda">
-                            <i class="fa-solid fa-calendar-days"></i>
-                            <span>Agenda</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-page="relatorios" title="Relatórios">
-                            <i class="fa-solid fa-chart-column"></i>
-                            <span>Relatórios</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-page="veiculos" title="Veículos">
-                            <i class="fa-solid fa-car-side"></i>
-                            <span>Veículos</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-page="patrimonio" title="Patrimônio">
-                            <i class="fa-solid fa-box-archive"></i>
-                            <span>Patrimônio</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-
-            <!-- ======================================================
-                                        PERFIL
-            ======================================================= -->
-            <div class="perfil">
-                <img src="img/avatar.png" alt="Administrador">
-                <div>
-                    <strong>Administrador</strong>
-                    <small id="dataAtual"></small>
-                </div>
-            </div>
-
-            <!-- ======================================================
-                                    MENU INFERIOR
-            ======================================================= -->
-            <div class="menu-inferior">
-                <a href="#">
-                    <i class="fa-solid fa-gear"></i>
-                    Configurações
-                </a>
-                <a href="#">
-                    <i class="fa-solid fa-circle-question"></i>
-                    Ajuda
-                </a>
-                <a href="#">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    Sair
-                </a>
-            </div>
-        </aside>
-
-        <!-- ==========================================================
-                                ÁREA PRINCIPAL
-        =========================================================== -->
-        <div class="main">
-
-            <!-- ======================================================
-                                        HEADER
-            ======================================================= -->
-            <header class="header">
-                <div class="header-esquerda">
-                    <button id="btnMenu" type="button">
-                        <i class="fa-solid fa-bars"></i>
-                    </button>
-                    <h1 id="tituloPagina">
-                        Dashboard
-                    </h1>
-                </div>
-
-                <div class="header-direita">
-                    <!-- Pesquisa -->
-                    <div class="pesquisa">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input id="pesquisaGlobal" type="search" placeholder="Pesquisar no sistema...">
+            <!-- ===== CADASTRO ===== -->
+            <div id="cadastro" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>📝 Ficha de Atendimento</h2>
+                        <span class="card-badge">Conselho Tutelar</span>
                     </div>
 
-                    <!-- Notificações -->
-                    <button class="notificacao" type="button">
-                        <i class="fa-solid fa-bell"></i>
-                    </button>
+                    <div class="form-container">
+                        <div class="form-header-bar">
+                            <span class="form-title">📋 FORMULÁRIO DE ATENDIMENTO</span>
+                            <span class="form-year">ANO 2026</span>
+                        </div>
 
-                    <!-- Usuário -->
-                    <div class="usuario">
-                        <img src="img/avatar.png" alt="Administrador">
-                        <div>
-                            <strong>Administrador</strong>
-                            <small>Conselheiro Tutelar</small>
+                        <div class="form-body">
+                            <form id="cadastroForm">
+
+                                <!-- DATA -->
+                                <div class="form-row">
+                                    <span class="label">📅 Data:</span>
+                                    <div class="field">
+                                        <div class="date-group">
+                                            <input type="number" id="dataDia" min="1" max="31" placeholder="DD" style="width:55px;">
+                                            <span class="date-separator">/</span>
+                                            <input type="number" id="dataMes" min="1" max="12" placeholder="MM" style="width:55px;">
+                                            <span class="date-separator">/</span>
+                                            <input type="number" id="dataAno" value="2026" placeholder="AAAA" style="width:75px;">
+                                            <span style="margin-left:8px; color:#999; font-size:12px;">(Dia/Mês/Ano)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- TIPO DE ATENDIMENTO 1 -->
+                                <div class="form-row">
+                                    <span class="label">📌 Tipo de atendimento:</span>
+                                    <div class="field">
+                                        <div class="radio-group">
+                                            <label><input type="radio" name="tipoAtendimento" value="Presencial"> Presencial</label>
+                                            <label><input type="radio" name="tipoAtendimento" value="Telefônico"> Telefônico</label>
+                                            <label>
+                                                <input type="radio" name="tipoAtendimento" value="Outros"> Outros:
+                                                <input type="text" id="tipoAtendimentoOutros" placeholder="Especifique">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="form-divider">
+
+                                <!-- CRIANÇA/ADOLESCENTE -->
+                                <div class="form-row">
+                                    <span class="label">👤 Criança/Adolescente:</span>
+                                    <div class="field">
+                                        <input type="text" id="nome" placeholder="Nome completo" required>
+                                    </div>
+                                </div>
+
+                                <!-- DATA NASCIMENTO -->
+                                <div class="form-row">
+                                    <span class="label">🎂 Data de nascimento:</span>
+                                    <div class="field">
+                                        <div class="date-group">
+                                            <input type="number" id="nascDia" min="1" max="31" placeholder="DD" style="width:55px;">
+                                            <span class="date-separator">/</span>
+                                            <input type="number" id="nascMes" min="1" max="12" placeholder="MM" style="width:55px;">
+                                            <span class="date-separator">/</span>
+                                            <input type="number" id="nascAno" placeholder="AAAA" style="width:75px;">
+                                            <span style="margin-left:8px; color:#999; font-size:12px;">(Dia/Mês/Ano)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- RESPONSÁVEL -->
+                                <div class="form-row">
+                                    <span class="label">👨‍👩‍👦 Responsável:</span>
+                                    <div class="field">
+                                        <input type="text" id="responsavel" placeholder="Nome do responsável" required>
+                                    </div>
+                                </div>
+
+                                <!-- ENDEREÇO -->
+                                <div class="form-row">
+                                    <span class="label">📍 Endereço:</span>
+                                    <div class="field">
+                                        <input type="text" id="endereco" placeholder="Rua, número, bairro, cidade" required>
+                                    </div>
+                                </div>
+
+                                <!-- TELEFONE -->
+                                <div class="form-row">
+                                    <span class="label">📞 Telefone:</span>
+                                    <div class="field">
+                                        <input type="tel" id="telefone" placeholder="(00) 00000-0000">
+                                    </div>
+                                </div>
+
+                                <hr class="form-divider">
+
+                                <!-- ASSUNTO -->
+                                <div class="form-row">
+                                    <span class="label">📋 ASSUNTO:</span>
+                                    <div class="field">
+                                        <div class="checkbox-group">
+                                            <label><input type="checkbox" name="assunto" value="Suspeita de abuso"> Suspeita de abuso</label>
+                                            <label><input type="checkbox" name="assunto" value="Violência física"> Violência física</label>
+                                            <label><input type="checkbox" name="assunto" value="Abandono de incapaz"> Abandono de incapaz</label>
+                                            <label><input type="checkbox" name="assunto" value="Vaga escolar"> Vaga escolar</label>
+                                            <label><input type="checkbox" name="assunto" value="Conflito familiar"> Conflito familiar</label>
+                                            <label>
+                                                <input type="checkbox" name="assunto" value="Outro"> Outro:
+                                                <input type="text" id="assuntoOutro" placeholder="Especifique">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- TIPO DE ATENDIMENTO 2 -->
+                                <div class="form-row">
+                                    <span class="label">📌 TIPO DE ATENDIMENTO:</span>
+                                    <div class="field">
+                                        <div class="radio-group">
+                                            <label><input type="radio" name="tipoAtendimento2" value="Presencial"> Presencial</label>
+                                            <label><input type="radio" name="tipoAtendimento2" value="Telefônico"> Telefônico</label>
+                                            <label>
+                                                <input type="radio" name="tipoAtendimento2" value="Outro"> Outro:
+                                                <input type="text" id="tipoAtendimento2Outros" placeholder="Especifique">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="form-divider">
+
+                                <!-- OBSERVAÇÃO -->
+                                <div class="form-row">
+                                    <span class="label">📝 Observação:</span>
+                                    <div class="field">
+                                        <textarea id="observacao" rows="3" placeholder="Observações adicionais sobre o caso"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-primary" onclick="salvarCadastro()">💾 Salvar</button>
+                                    <button type="button" class="btn btn-info" onclick="carregarPDF()">📄 PDF</button>
+                                    <button type="button" class="btn btn-success" onclick="exportarExcel()">📊 Exportar</button>
+                                    <button type="button" class="btn btn-secondary" onclick="limparFormulario()">🗑️ Limpar</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </header>
 
-            <!-- ======================================================
-                                        LOADING
-            ======================================================= -->
-            <div id="loading" class="loading oculto">
-                <div class="spinner"></div>
+                <!-- Lista de Cadastros -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>📋 Últimos Cadastros</h2>
+                        <span class="card-badge" id="totalCadastros">0</span>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr><th>Data</th><th>Nome</th><th>Nascimento</th><th>Responsável</th><th>Assunto</th><th>Cidade</th><th>Ações</th></tr>
+                            </thead>
+                            <tbody id="tabelaCadastros">
+                                <tr><td colspan="7" style="text-align:center; color:#999; padding:30px;">📭 Nenhum cadastro realizado</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
-            <!-- ======================================================
-                                CONTEÚDO DINÂMICO
-            ======================================================= -->
-            <main id="conteudo" class="conteudo">
-                <!-- dashboard.html será carregado aqui -->
-            </main>
+            <!-- ===== ATENDIMENTOS ===== -->
+            <div id="atendimentos" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>📋 Histórico de Atendimentos</h2>
+                        <span class="card-badge" id="totalAtendimentos">0</span>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr><th>Data</th><th>Nome</th><th>Assunto</th><th>Tipo</th><th>Cidade</th><th>Status</th></tr>
+                            </thead>
+                            <tbody id="tabelaAtendimentos">
+                                <tr><td colspan="6" style="text-align:center; color:#999; padding:30px;">📭 Nenhum atendimento registrado</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
-            <!-- ======================================================
-                                            FOOTER
-            ======================================================= -->
-            <footer class="footer">
-                <div>
-                    SIGACTPAR © 2026
+            <!-- ===== PESSOAS ===== -->
+            <div id="pessoas" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>👤 Pessoas Atendidas</h2>
+                        <span class="card-badge" id="totalPessoas">0</span>
+                    </div>
+                    <div class="search-bar">
+                        <input type="text" id="buscaPessoa" placeholder="🔍 Buscar por nome, responsável, cidade..." oninput="atualizarPessoas()">
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr><th>Nome</th><th>Nascimento</th><th>Gênero</th><th>Responsável</th><th>Cidade</th><th>Atend.</th><th>Último</th></tr>
+                            </thead>
+                            <tbody id="tabelaPessoas">
+                                <tr><td colspan="7" style="text-align:center; color:#999; padding:30px;">📭 Nenhuma pessoa cadastrada</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div>
-                    Sistema Integrado de Gestão de Atendimentos
+            </div>
+
+            <!-- ===== RELATÓRIOS ===== -->
+            <div id="relatorios" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>📈 Relatórios Gerenciais</h2>
+                        <span class="card-badge">Análise</span>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="gerarRelatorio('hoje')">📅 Hoje</button>
+                        <button class="btn btn-success" onclick="gerarRelatorio('mes')">📅 Mês</button>
+                        <button class="btn btn-info" onclick="gerarRelatorio('ano')">📅 Ano</button>
+                        <button class="btn btn-warning" onclick="gerarRelatorioCompleto()">📊 Completo</button>
+                    </div>
+                    <div id="relatorioOutput" class="report-output">
+                        <div class="report-placeholder">📊 Selecione um relatório para visualizar</div>
+                    </div>
                 </div>
-                <div>
-                    Conselho Tutelar do Paranoá
-                </div>
-            </footer>
+            </div>
 
         </div>
-
     </div>
 
-    <!-- ==========================================================
-                                JAVASCRIPT
-    ========================================================== -->
-    <!-- Banco de Dados -->
-    <script defer src="js/banco.js"></script>
+    <!-- ===== MODAL PDF ===== -->
+    <div class="modal" id="pdfModal">
+        <div class="modal-content">
+            <div class="modal-title">📄 Carregar PDF</div>
+            <p class="modal-desc">O sistema irá extrair automaticamente as informações do PDF e preencher o formulário.</p>
+            <div class="file-upload-area" onclick="document.getElementById('pdfInput').click()">
+                <span class="upload-icon">📂</span>
+                <div class="upload-text">Clique para selecionar um arquivo PDF</div>
+                <div class="upload-hint">Formatos suportados: .pdf</div>
+                <input type="file" id="pdfInput" accept=".pdf">
+            </div>
+            <div id="pdfPreview" style="margin-top:16px;"></div>
+            <div class="form-actions" style="margin-top:18px;">
+                <button class="btn btn-primary" onclick="processarPDF()">🔄 Processar</button>
+                <button class="btn btn-secondary" onclick="fecharModal('pdfModal')">❌ Fechar</button>
+            </div>
+        </div>
+    </div>
 
-    <!-- Sistema e Navegação -->
-    <script defer src="js/menu.js"></script>
-    <script defer src="js/modal.js"></script>
-    <script defer src="js/dashboard.js"></script>
-    <script defer src="js/atendimentos.js"></script>
-    <script defer src="js/criancas.js"></script>
-    <script defer src="js/responsaveis.js"></script>
-    <script defer src="js/processos.js"></script>
-    <script defer src="js/agenda.js"></script>
-    <script defer src="js/relatorios.js"></script>
-    <script defer src="js/veiculos.js"></script>
-    <script defer src="js/patrimonio.js"></script>
+    <script>
+        // ============================================
+        // BANCO DE DADOS
+        // ============================================
+        let dados = {
+            cadastros: [],
+            atendimentos: []
+        };
 
-    <!-- Inicialização -->
-    <script defer src="js/app.js"></script>
+        function carregarDados() {
+            const stored = localStorage.getItem('conselhoDados_v3');
+            if (stored) {
+                dados = JSON.parse(stored);
+            }
+            atualizarTabelas();
+            atualizarDashboard();
+            atualizarMenus();
+        }
 
+        function salvarDados() {
+            localStorage.setItem('conselhoDados_v3', JSON.stringify(dados));
+            atualizarTabelas();
+            atualizarDashboard();
+            atualizarMenus();
+        }
+
+        // ============================================
+        // MENU
+        // ============================================
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
+        }
+
+        function showSection(sectionId) {
+            document.getElementById('sidebar').classList.remove('open');
+            document.querySelector('.sidebar-overlay').classList.remove('active');
+
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+
+            document.querySelectorAll('.sidebar-menu .menu-item').forEach(m => m.classList.remove('active'));
+            document.querySelector(`.sidebar-menu .menu-item[onclick="showSection('${sectionId}')"]`).classList.add('active');
+
+            const titles = {
+                'dashboard': '📊 Dashboard',
+                'cadastro': '📝 Atendimento',
+                'atendimentos': '📋 Histórico',
+                'pessoas': '👤 Pessoas',
+                'relatorios': '📈 Relatórios'
+            };
+            document.getElementById('pageTitle').textContent = titles[sectionId] || 'Sistema';
+
+            if (sectionId === 'dashboard') atualizarDashboard();
+            if (sectionId === 'pessoas') atualizarPessoas();
+        }
+
+        function atualizarMenus() {
+            document.getElementById('menuTotal').textContent = dados.cadastros.length;
+            document.getElementById('menuAtendimentos').textContent = dados.atendimentos.length;
+            document.getElementById('menuPessoas').textContent = dados.cadastros.length;
+            document.getElementById('totalCadastros').textContent = dados.cadastros.length;
+            document.getElementById('totalAtendimentos').textContent = dados.atendimentos.length;
+        }
+
+        // ============================================
+        // FORMATAÇÃO
+        // ============================================
+        function formatarDataParaInput(dia, mes, ano) {
+            if (!dia || !mes || !ano) return '';
+            return `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+        }
+
+        function formatarDataExibicao(data) {
+            if (!data) return '-';
+            try {
+                const d = new Date(data);
+                return d.toLocaleDateString('pt-BR');
+            } catch(e) {
+                return data;
+            }
+        }
+
+        function formatarDataCompleta(dia, mes, ano) {
+            if (!dia || !mes || !ano) return '';
+            return `${String(dia).padStart(2, '0')}/${String(mes).padStart(2, '0')}/${ano}`;
+        }
+
+        // ============================================
+        // CADASTRO
+        // ============================================
+        function salvarCadastro() {
+            const nome = document.getElementById('nome').value.trim();
+            if (!nome) {
+                alert('⚠️ Preencha o nome da criança/adolescente.');
+                document.getElementById('nome').focus();
+                return;
+            }
+
+            const responsavel = document.getElementById('responsavel').value.trim();
+            if (!responsavel) {
+                alert('⚠️ Preencha o nome do responsável.');
+                document.getElementById('responsavel').focus();
+                return;
+            }
+
+            const dia = document.getElementById('dataDia').value;
+            const mes = document.getElementById('dataMes').value;
+            const ano = document.getElementById('dataAno').value || '2026';
+            const dataAtendimento = formatarDataParaInput(dia, mes, ano);
+
+            const nDia = document.getElementById('nascDia').value;
+            const nMes = document.getElementById('nascMes').value;
+            const nAno = document.getElementById('nascAno').value;
+            const dataNascimento = formatarDataParaInput(nDia, nMes, nAno);
+
+            // Tipo atendimento
+            let tipoAtendimento = '';
+            document.querySelectorAll('input[name="tipoAtendimento"]').forEach(r => {
+                if (r.checked) {
+                    tipoAtendimento = r.value;
+                    if (r.value === 'Outros') {
+                        const outros = document.getElementById('tipoAtendimentoOutros').value.trim();
+                        if (outros) tipoAtendimento += `: ${outros}`;
+                    }
+                }
+            });
+
+            let tipoAtendimento2 = '';
+            document.querySelectorAll('input[name="tipoAtendimento2"]').forEach(r => {
+                if (r.checked) {
+                    tipoAtendimento2 = r.value;
+                    if (r.value === 'Outro') {
+                        const outros = document.getElementById('tipoAtendimento2Outros').value.trim();
+                        if (outros) tipoAtendimento2 += `: ${outros}`;
+                    }
+                }
+            });
+
+            // Assunto
+            const assuntosSelecionados = [];
+            document.querySelectorAll('input[name="assunto"]:checked').forEach(cb => {
+                let valor = cb.value;
+                if (cb.value === 'Outro') {
+                    const outro = document.getElementById('assuntoOutro').value.trim();
+                    if (outro) valor = outro;
+                }
+                assuntosSelecionados.push(valor);
+            });
+
+            if (assuntosSelecionados.length === 0) {
+                alert('⚠️ Selecione pelo menos um assunto.');
+                return;
+            }
+
+            const assunto = assuntosSelecionados.join('; ');
+
+            const cadastro = {
+                id: Date.now(),
+                data: dataAtendimento,
+                dataExibicao: formatarDataCompleta(dia, mes, ano),
+                nome: nome,
+                nascimento: dataNascimento,
+                nascimentoExibicao: formatarDataCompleta(nDia, nMes, nAno),
+                genero: 'Não informado',
+                responsavel: responsavel,
+                telefone: document.getElementById('telefone').value.trim(),
+                endereco: document.getElementById('endereco').value.trim(),
+                cidade: document.getElementById('endereco').value.trim().split(',').pop().trim() || 'Não informado',
+                assunto: assunto,
+                tipoAtendimento: tipoAtendimento || tipoAtendimento2 || 'Presencial',
+                observacao: document.getElementById('observacao').value.trim(),
+                dataCadastro: new Date().toISOString()
+            };
+
+            // Verifica duplicidade
+            const duplicado = dados.cadastros.find(c => 
+                c.nome.toLowerCase() === cadastro.nome.toLowerCase() && 
+                c.responsavel.toLowerCase() === cadastro.responsavel.toLowerCase()
+            );
+
+            if (duplicado) {
+                if (!confirm(`⚠️ Já existe um cadastro para ${cadastro.nome} com responsável ${cadastro.responsavel}. Deseja adicionar mesmo assim?`)) {
+                    return;
+                }
+            }
+
+            dados.cadastros.push(cadastro);
+            
+            dados.atendimentos.push({
+                id: Date.now(),
+                idCadastro: cadastro.id,
+                data: cadastro.data,
+                dataExibicao: cadastro.dataExibicao,
+                nome: cadastro.nome,
+                assunto: cadastro.assunto,
+                tipo: cadastro.tipoAtendimento,
+                cidade: cadastro.cidade,
+                status: 'Atendido'
+            });
+
+            salvarDados();
+            limparFormulario();
+            alert(`✅ Cadastro de ${cadastro.nome} realizado com sucesso!`);
+        }
+
+        function limparFormulario() {
+            document.getElementById('cadastroForm').reset();
+            document.getElementById('dataDia').value = '';
+            document.getElementById('dataMes').value = '';
+            document.getElementById('dataAno').value = '2026';
+            document.getElementById('nascDia').value = '';
+            document.getElementById('nascMes').value = '';
+            document.getElementById('nascAno').value = '';
+            document.getElementById('tipoAtendimentoOutros').value = '';
+            document.getElementById('tipoAtendimento2Outros').value = '';
+            document.getElementById('assuntoOutro').value = '';
+            document.getElementById('observacao').value = '';
+        }
+
+        // ============================================
+        // TABELAS
+        // ============================================
+        function atualizarTabelas() {
+            // Cadastros
+            const tbodyCadastros = document.getElementById('tabelaCadastros');
+            if (dados.cadastros.length === 0) {
+                tbodyCadastros.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#999; padding:30px;">📭 Nenhum cadastro realizado</td></tr>`;
+            } else {
+                tbodyCadastros.innerHTML = dados.cadastros.slice().reverse().slice(0, 15).map(c => `
+                    <tr>
+                        <td>${c.dataExibicao || formatarDataExibicao(c.data)}</td>
+                        <td><strong>${c.nome}</strong></td>
+                        <td>${c.nascimentoExibicao || formatarDataExibicao(c.nascimento)}</td>
+                        <td>${c.responsavel}</td>
+                        <td><span class="status-badge atendido">${c.assunto}</span></td>
+                        <td>${c.cidade}</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" onclick="excluirCadastro(${c.id})">🗑️</button>
+                            <button class="btn btn-info btn-sm" onclick="verDetalhes(${c.id})">👁️</button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // Atendimentos
+            const tbodyAtendimentos = document.getElementById('tabelaAtendimentos');
+            if (dados.atendimentos.length === 0) {
+                tbodyAtendimentos.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#999; padding:30px;">📭 Nenhum atendimento registrado</td></tr>`;
+            } else {
+                tbodyAtendimentos.innerHTML = dados.atendimentos.slice().reverse().slice(0, 25).map(a => `
+                    <tr>
+                        <td>${a.dataExibicao || formatarDataExibicao(a.data)}</td>
+                        <td><strong>${a.nome}</strong></td>
+                        <td><span class="status-badge andamento">${a.assunto}</span></td>
+                        <td>${a.tipo || 'Presencial'}</td>
+                        <td>${a.cidade}</td>
+                        <td><span class="status-badge atendido">${a.status || 'Atendido'}</span></td>
+                    </tr>
+                `).join('');
+            }
+
+            atualizarMenus();
+        }
+
+        function excluirCadastro(id) {
+            if (confirm('⚠️ Tem certeza que deseja excluir este cadastro?')) {
+                dados.cadastros = dados.cadastros.filter(c => c.id !== id);
+                dados.atendimentos = dados.atendimentos.filter(a => a.idCadastro !== id);
+                salvarDados();
+            }
+        }
+
+        function verDetalhes(id) {
+            const cadastro = dados.cadastros.find(c => c.id === id);
+            if (cadastro) {
+                alert(`👤 DETALHES DO CADASTRO\n\n` +
+                    `📌 Nome: ${cadastro.nome}\n` +
+                    `📅 Nascimento: ${cadastro.nascimentoExibicao || formatarDataExibicao(cadastro.nascimento)}\n` +
+                    `👨‍👩‍👦 Responsável: ${cadastro.responsavel}\n` +
+                    `📞 Telefone: ${cadastro.telefone || 'Não informado'}\n` +
+                    `📍 Endereço: ${cadastro.endereco || 'Não informado'}\n` +
+                    `🏙️ Cidade: ${cadastro.cidade}\n` +
+                    `📋 Assunto: ${cadastro.assunto}\n` +
+                    `📌 Tipo: ${cadastro.tipoAtendimento || 'Não informado'}\n` +
+                    `📝 Obs: ${cadastro.observacao || 'Nenhuma'}`);
+            }
+        }
+
+        // ============================================
+        // PESSOAS
+        // ============================================
+        function atualizarPessoas() {
+            const tbody = document.getElementById('tabelaPessoas');
+            const busca = document.getElementById('buscaPessoa').value.toLowerCase();
+
+            const pessoasMap = new Map();
+            dados.cadastros.forEach(c => {
+                const key = c.nome.toLowerCase();
+                if (!pessoasMap.has(key)) {
+                    pessoasMap.set(key, {
+                        nome: c.nome,
+                        nascimento: c.nascimentoExibicao || formatarDataExibicao(c.nascimento),
+                        genero: c.genero || 'Não informado',
+                        responsavel: c.responsavel,
+                        cidade: c.cidade,
+                        atendimentos: [],
+                        ultimoAtendimento: c.dataExibicao || c.data
+                    });
+                }
+                const pessoa = pessoasMap.get(key);
+                pessoa.atendimentos.push(c);
+                const dataAtual = c.dataExibicao || c.data;
+                if (dataAtual > pessoa.ultimoAtendimento) {
+                    pessoa.ultimoAtendimento = dataAtual;
+                }
+            });
+
+            let pessoas = Array.from(pessoasMap.values());
+
+            if (busca) {
+                pessoas = pessoas.filter(p => 
+                    p.nome.toLowerCase().includes(busca) ||
+                    p.responsavel.toLowerCase().includes(busca) ||
+                    p.cidade.toLowerCase().includes(busca)
+                );
+            }
+
+            document.getElementById('totalPessoas').textContent = pessoas.length;
+
+            if (pessoas.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#999; padding:30px;">📭 Nenhuma pessoa encontrada</td></tr>`;
+            } else {
+                tbody.innerHTML = pessoas.map(p => `
+                    <tr>
+                        <td><strong>${p.nome}</strong></td>
+                        <td>${p.nascimento}</td>
+                        <td>${p.genero}</td>
+                        <td>${p.responsavel}</td>
+                        <td>${p.cidade}</td>
+                        <td><span class="status-badge atendido">${p.atendimentos.length}</span></td>
+                        <td>${p.ultimoAtendimento}</td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        // ============================================
+        // DASHBOARD
+        // ============================================
+        function atualizarDashboard() {
+            const hoje = new Date().toISOString().split('T')[0];
+            const mesAtual = new Date().getMonth();
+            const anoAtual = new Date().getFullYear();
+
+            const atendimentosHoje = dados.atendimentos.filter(a => a.data === hoje);
+            const atendimentosMes = dados.atendimentos.filter(a => {
+                const data = new Date(a.data);
+                return data.getMonth() === mesAtual && data.getFullYear() === anoAtual;
+            });
+            const atendimentosAno = dados.atendimentos.filter(a => {
+                const data = new Date(a.data);
+                return data.getFullYear() === anoAtual;
+            });
+
+            const pessoasUnicas = new Set(dados.cadastros.map(c => c.nome.toLowerCase()));
+            document.getElementById('pessoasUnicas').textContent = pessoasUnicas.size;
+
+            document.getElementById('hojeCount').textContent = atendimentosHoje.length;
+            document.getElementById('mesCount').textContent = atendimentosMes.length;
+            document.getElementById('anoCount').textContent = atendimentosAno.length;
+            document.getElementById('totalCount').textContent = dados.cadastros.length;
+
+            gerarGraficos();
+        }
+
+        function gerarGraficos() {
+            // Assuntos
+            const assuntos = {};
+            dados.atendimentos.forEach(a => {
+                const assuntosList = a.assunto.split('; ');
+                assuntosList.forEach(ass => {
+                    assuntos[ass] = (assuntos[ass] || 0) + 1;
+                });
+            });
+            const sortedAssuntos = Object.entries(assuntos).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            const assuntosDiv = document.getElementById('assuntosChart');
+            if (sortedAssuntos.length === 0) {
+                assuntosDiv.innerHTML = '<p style="color:#999; text-align:center; padding:15px 0;">Nenhum dado</p>';
+            } else {
+                const max = Math.max(...sortedAssuntos.map(a => a[1]));
+                assuntosDiv.innerHTML = sortedAssuntos.map(([key, value]) => `
+                    <div class="bar-item">
+                        <span class="bar-label">${key.length > 22 ? key.substring(0, 22)+'…' : key}</span>
+                        <div class="bar-track">
+                            <div class="bar-fill blue" style="width: ${(value/max)*100}%;">${value}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Cidades
+            const cidades = {};
+            dados.atendimentos.forEach(a => {
+                cidades[a.cidade] = (cidades[a.cidade] || 0) + 1;
+            });
+            const sortedCidades = Object.entries(cidades).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            const cidadesDiv = document.getElementById('cidadesChart');
+            if (sortedCidades.length === 0) {
+                cidadesDiv.innerHTML = '<p style="color:#999; text-align:center; padding:15px 0;">Nenhum dado</p>';
+            } else {
+                const max = Math.max(...sortedCidades.map(c => c[1]));
+                cidadesDiv.innerHTML = sortedCidades.map(([key, value]) => `
+                    <div class="bar-item">
+                        <span class="bar-label">${key}</span>
+                        <div class="bar-track">
+                            <div class="bar-fill green" style="width: ${(value/max)*100}%;">${value}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Violações
+            const violacoes = {};
+            const termosViolacao = ['Violência', 'Abuso', 'Abandono', 'Negligência'];
+            dados.atendimentos.forEach(a => {
+                const assuntosList = a.assunto.split('; ');
+                assuntosList.forEach(ass => {
+                    if (termosViolacao.some(t => ass.includes(t))) {
+                        violacoes[ass] = (violacoes[ass] || 0) + 1;
+                    }
+                });
+            });
+            const sortedViolacoes = Object.entries(violacoes).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            const violacoesDiv = document.getElementById('violacoesChart');
+            if (sortedViolacoes.length === 0) {
+                violacoesDiv.innerHTML = '<p style="color:#999; text-align:center; padding:15px 0;">Nenhuma violação</p>';
+            } else {
+                const max = Math.max(...sortedViolacoes.map(v => v[1]));
+                violacoesDiv.innerHTML = sortedViolacoes.map(([key, value]) => `
+                    <div class="bar-item">
+                        <span class="bar-label">${key.length > 22 ? key.substring(0, 22)+'…' : key}</span>
+                        <div class="bar-track">
+                            <div class="bar-fill red" style="width: ${(value/max)*100}%;">${value}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Gênero
+            const generos = {};
+            dados.cadastros.forEach(c => {
+                const gen = c.genero || 'Não informado';
+                generos[gen] = (generos[gen] || 0) + 1;
+            });
+            const generosDiv = document.getElementById('generoChart');
+            if (Object.keys(generos).length === 0) {
+                generosDiv.innerHTML = '<p style="color:#999; text-align:center; padding:15px 0;">Nenhum dado</p>';
+            } else {
+                const total = Object.values(generos).reduce((a, b) => a + b, 0);
+                generosDiv.innerHTML = Object.entries(generos).map(([key, value]) => `
+                    <div class="bar-item">
+                        <span class="bar-label">${key}</span>
+                        <div class="bar-track">
+                            <div class="bar-fill purple" style="width: ${(value/total)*100}%;">${value} (${Math.round((value/total)*100)}%)</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // ============================================
+        // RELATÓRIOS
+        // ============================================
+        function gerarRelatorio(tipo) {
+            const hoje = new Date().toISOString().split('T')[0];
+            const mesAtual = new Date().getMonth();
+            const anoAtual = new Date().getFullYear();
+            let filtrados = [];
+
+            if (tipo === 'hoje') {
+                filtrados = dados.atendimentos.filter(a => a.data === hoje);
+            } else if (tipo === 'mes') {
+                filtrados = dados.atendimentos.filter(a => {
+                    const data = new Date(a.data);
+                    return data.getMonth() === mesAtual && data.getFullYear() === anoAtual;
+                });
+            } else if (tipo === 'ano') {
+                filtrados = dados.atendimentos.filter(a => {
+                    const data = new Date(a.data);
+                    return data.getFullYear() === anoAtual;
+                });
+            }
+
+            const output = document.getElementById('relatorioOutput');
+            if (filtrados.length === 0) {
+                output.innerHTML = `<div class="report-placeholder">📭 Nenhum atendimento encontrado para este período.</div>`;
+            } else {
+                const assuntos = {};
+                const cidades = {};
+                const tipos = {};
+
+                filtrados.forEach(a => {
+                    const assuntosList = a.assunto.split('; ');
+                    assuntosList.forEach(ass => {
+                        assuntos[ass] = (assuntos[ass] || 0) + 1;
+                    });
+                    cidades[a.cidade] = (cidades[a.cidade] || 0) + 1;
+                    tipos[a.tipo || 'Presencial'] = (tipos[a.tipo || 'Presencial'] || 0) + 1;
+                });
+
+                output.innerHTML = `
+                    <h4 style="color:var(--primary); margin-bottom:12px;">📊 Relatório - ${tipo === 'hoje' ? 'Hoje' : tipo === 'mes' ? 'Mês' : 'Ano'}</h4>
+                    <div class="report-grid">
+                        <div class="report-stat">
+                            <div class="rs-number">${filtrados.length}</div>
+                            <div class="rs-label">Total</div>
+                        </div>
+                        <div class="report-stat">
+                            <div class="rs-number">${Object.keys(assuntos).length}</div>
+                            <div class="rs-label">Assuntos</div>
+                        </div>
+                        <div class="report-stat">
+                            <div class="rs-number">${Object.keys(cidades).length}</div>
+                            <div class="rs-label">Cidades</div>
+                        </div>
+                        <div class="report-stat">
+                            <div class="rs-number">${Object.keys(tipos).length}</div>
+                            <div class="rs-label">Tipos</div>
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; font-size:13px;">
+                        <div>
+                            <p><strong>📋 Assuntos:</strong></p>
+                            <ul style="list-style:none; padding:0;">
+                                ${Object.entries(assuntos).sort((a,b) => b[1]-a[1]).slice(0,5).map(([k,v]) => `<li style="padding:4px 0; border-bottom:1px solid #eee;">${k}: <strong>${v}</strong></li>`).join('') || '<li>N/A</li>'}
+                            </ul>
+                        </div>
+                        <div>
+                            <p><strong>📍 Cidades:</strong></p>
+                            <ul style="list-style:none; padding:0;">
+                                ${Object.entries(cidades).sort((a,b) => b[1]-a[1]).slice(0,5).map(([k,v]) => `<li style="padding:4px 0; border-bottom:1px solid #eee;">${k}: <strong>${v}</strong></li>`).join('') || '<li>N/A</li>'}
+                            </ul>
+                        </div>
+                    </div>
+                    <div style="margin-top:10px; font-size:13px;">
+                        <p><strong>📌 Tipos:</strong> ${Object.entries(tipos).map(([k,v]) => `${k}: ${v}`).join(' | ')}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function gerarRelatorioCompleto() {
+            const output = document.getElementById('relatorioOutput');
+            const pessoasUnicas = new Set(dados.cadastros.map(c => c.nome.toLowerCase()));
+
+            const assuntos = {};
+            dados.atendimentos.forEach(a => {
+                const assuntosList = a.assunto.split('; ');
+                assuntosList.forEach(ass => {
+                    assuntos[ass] = (assuntos[ass] || 0) + 1;
+                });
+            });
+
+            const cidades = {};
+            dados.atendimentos.forEach(a => {
+                cidades[a.cidade] = (cidades[a.cidade] || 0) + 1;
+            });
+
+            const tipos = {};
+            dados.atendimentos.forEach(a => {
+                tipos[a.tipo || 'Presencial'] = (tipos[a.tipo || 'Presencial'] || 0) + 1;
+            });
+
+            output.innerHTML = `
+                <h4 style="color:var(--primary); margin-bottom:12px;">📊 Relatório Completo</h4>
+                <div class="report-grid">
+                    <div class="report-stat">
+                        <div class="rs-number">${dados.cadastros.length}</div>
+                        <div class="rs-label">Cadastros</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="rs-number">${dados.atendimentos.length}</div>
+                        <div class="rs-label">Atendimentos</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="rs-number">${pessoasUnicas.size}</div>
+                        <div class="rs-label">Pessoas Únicas</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="rs-number">${Object.keys(cidades).length}</div>
+                        <div class="rs-label">Cidades</div>
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; font-size:13px;">
+                    <div>
+                        <p><strong>📋 Top 5 Assuntos:</strong></p>
+                        <ul style="list-style:none; padding:0;">
+                            ${Object.entries(assuntos).sort((a,b) => b[1]-a[1]).slice(0,5).map(([k,v]) => `<li style="padding:4px 0; border-bottom:1px solid #eee;">${k}: <strong>${v}</strong></li>`).join('') || '<li>Nenhum dado</li>'}
+                        </ul>
+                    </div>
+                    <div>
+                        <p><strong>📍 Top 5 Cidades:</strong></p>
+                        <ul style="list-style:none; padding:0;">
+                            ${Object.entries(cidades).sort((a,b) => b[1]-a[1]).slice(0,5).map(([k,v]) => `<li style="padding:4px 0; border-bottom:1px solid #eee;">${k}: <strong>${v}</strong></li>`).join('') || '<li>Nenhum dado</li>'}
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-top:10px; font-size:13px;">
+                    <p><strong>📌 Tipos de Atendimento:</strong> ${Object.entries(tipos).map(([k,v]) => `${k}: ${v}`).join(' | ')}</p>
+                </div>
+            `;
+        }
+
+        // ============================================
+        // PDF
+        // ============================================
+        function carregarPDF() {
+            document.getElementById('pdfModal').classList.add('active');
+            document.getElementById('pdfPreview').innerHTML = '';
+            document.getElementById('pdfInput').value = '';
+        }
+
+        function fecharModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function processarPDF() {
+            const fileInput = document.getElementById('pdfInput');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('⚠️ Selecione um arquivo PDF.');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const text = e.target.result;
+                    const linhas = text.split('\n');
+                    let dadosExtraidos = {
+                        nome: '', data: '', nascimento: '', responsavel: '',
+                        endereco: '', telefone: '', assunto: '', tipo: ''
+                    };
+
+                    const padroes = {
+                        nome: [/Nome[: ]*([^\n]+)/i, /Criança[: ]*([^\n]+)/i, /Adolescente[: ]*([^\n]+)/i],
+                        data: [/Data[: ]*([\d\/]+)/i, /(\d{2}\/\d{2}\/\d{4})/],
+                        nascimento: [/Nascimento[: ]*([\d\/]+)/i, /Nasc[: ]*([\d\/]+)/i],
+                        responsavel: [/Respons[áa]vel[: ]*([^\n]+)/i, /Resp[: ]*([^\n]+)/i],
+                        endereco: [/Endere[çc]o[: ]*([^\n]+)/i, /End[: ]*([^\n]+)/i],
+                        telefone: [/Telefone[: ]*([^\n]+)/i, /Tel[: ]*([^\n]+)/i],
+                        assunto: [/Assunto[: ]*([^\n]+)/i],
+                        tipo: [/Tipo de atendimento[: ]*([^\n]+)/i]
+                    };
+
+                    linhas.forEach(linha => {
+                        const l = linha.trim();
+                        if (!l) return;
+
+                        for (const [campo, padroesList] of Object.entries(padroes)) {
+                            if (!dadosExtraidos[campo]) {
+                                for (const padrao of padroesList) {
+                                    const match = l.match(padrao);
+                                    if (match && match[1]) {
+                                        dadosExtraidos[campo] = match[1].trim();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    // Preenche formulário
+                    if (dadosExtraidos.nome) document.getElementById('nome').value = dadosExtraidos.nome;
+                    if (dadosExtraidos.responsavel) document.getElementById('responsavel').value = dadosExtraidos.responsavel;
+                    if (dadosExtraidos.endereco) document.getElementById('endereco').value = dadosExtraidos.endereco;
+                    if (dadosExtraidos.telefone) document.getElementById('telefone').value = dadosExtraidos.telefone;
+
+                    if (dadosExtraidos.data) {
+                        const partes = dadosExtraidos.data.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+                        if (partes) {
+                            document.getElementById('dataDia').value = parseInt(partes[1]);
+                            document.getElementById('dataMes').value = parseInt(partes[2]);
+                            document.getElementById('dataAno').value = parseInt(partes[3]);
+                        }
+                    }
+
+                    if (dadosExtraidos.nascimento) {
+                        const partes = dadosExtraidos.nascimento.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+                        if (partes) {
+                            document.getElementById('nascDia').value = parseInt(partes[1]);
+                            document.getElementById('nascMes').value = parseInt(partes[2]);
+                            document.getElementById('nascAno').value = parseInt(partes[3]);
+                        }
+                    }
+
+                    if (dadosExtraidos.assunto) {
+                        const assuntoLower = dadosExtraidos.assunto.toLowerCase();
+                        document.querySelectorAll('input[name="assunto"]').forEach(cb => {
+                            if (assuntoLower.includes(cb.value.toLowerCase())) {
+                                cb.checked = true;
+                            }
+                        });
+                        if (!document.querySelector('input[name="assunto"]:checked')) {
+                            document.querySelector('input[name="assunto"][value="Outro"]').checked = true;
+                            document.getElementById('assuntoOutro').value = dadosExtraidos.assunto;
+                        }
+                    }
+
+                    if (dadosExtraidos.tipo) {
+                        const tipoLower = dadosExtraidos.tipo.toLowerCase();
+                        document.querySelectorAll('input[name="tipoAtendimento"]').forEach(r => {
+                            if (tipoLower.includes(r.value.toLowerCase())) {
+                                r.checked = true;
+                            }
+                        });
+                        document.querySelectorAll('input[name="tipoAtendimento2"]').forEach(r => {
+                            if (tipoLower.includes(r.value.toLowerCase())) {
+                                r.checked = true;
+                            }
+                        });
+                    }
+
+                    document.getElementById('pdfPreview').innerHTML = `
+                        <div style="background:#e8f5e9; padding:14px; border-radius:8px; border-left:4px solid #2e7d32;">
+                            <p style="color:#2e7d32; font-weight:600;">✅ Dados extraídos com sucesso!</p>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:3px; margin-top:8px; font-size:13px;">
+                                <span><strong>Nome:</strong> ${dadosExtraidos.nome || '—'}</span>
+                                <span><strong>Data:</strong> ${dadosExtraidos.data || '—'}</span>
+                                <span><strong>Nascimento:</strong> ${dadosExtraidos.nascimento || '—'}</span>
+                                <span><strong>Responsável:</strong> ${dadosExtraidos.responsavel || '—'}</span>
+                                <span><strong>Telefone:</strong> ${dadosExtraidos.telefone || '—'}</span>
+                                <span><strong>Assunto:</strong> ${dadosExtraidos.assunto || '—'}</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    fecharModal('pdfModal');
+                    alert('📄 Dados extraídos do PDF com sucesso!');
+                } catch (error) {
+                    alert('❌ Erro ao processar o PDF.');
+                    console.error(error);
+                }
+            };
+
+            reader.onerror = function() {
+                alert('❌ Erro ao ler o arquivo.');
+            };
+
+            reader.readAsText(file);
+        }
+
+        // ============================================
+        // EXPORTAR EXCEL
+        // ============================================
+        function exportarExcel() {
+            if (dados.cadastros.length === 0) {
+                alert('❌ Nenhum dado para exportar.');
+                return;
+            }
+
+            let csv = 'Data,Nome,Nascimento,Responsável,Telefone,Endereço,Cidade,Assunto,Tipo,Observação\n';
+            dados.cadastros.forEach(c => {
+                csv += `"${c.dataExibicao || formatarDataExibicao(c.data)}","${c.nome}","${c.nascimentoExibicao || formatarDataExibicao(c.nascimento)}","${c.responsavel}","${c.telefone}","${c.endereco}","${c.cidade}","${c.assunto}","${c.tipoAtendimento}","${c.observacao}"\n`;
+            });
+
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `cadastros_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+
+        // ============================================
+        // INICIALIZAÇÃO
+        // ============================================
+        document.getElementById('dataAtual').textContent = new Date().toLocaleDateString('pt-BR', {
+            day: '2-digit', month: 'short', year: 'numeric'
+        });
+        document.getElementById('dataAno').value = '2026';
+
+        carregarDados();
+
+        console.log('🏛️ Sistema Conselho Tutelar v2.0');
+        console.log(`📊 ${dados.cadastros.length} cadastros, ${dados.atendimentos.length} atendimentos`);
+    </script>
 </body>
-
 </html>
