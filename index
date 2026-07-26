@@ -17,7 +17,7 @@
             --primary-light: #283593;
             --secondary: #ff6f00;
             --secondary-light: #ffab00;
-            --bg: #f4f6f9;
+            --bg: #f0f2f5;
             --card-shadow: 0 2px 12px rgba(0,0,0,0.08);
             --radius: 10px;
             --transition: all 0.3s ease;
@@ -60,7 +60,6 @@
             font-size: 20px;
             font-weight: 600;
             letter-spacing: 0.5px;
-            color: #fff;
         }
 
         .sidebar-brand .subtitle {
@@ -361,6 +360,7 @@
             display: flex;
             align-items: center;
             gap: 3px;
+            flex-wrap: wrap;
         }
 
         .form-row .field textarea {
@@ -403,12 +403,14 @@
             border-radius: 6px;
             font-size: 13px;
             margin-left: 2px;
+            background: #fafbfc;
         }
 
         .checkbox-group label input[type="text"]:focus,
         .radio-group label input[type="text"]:focus {
             outline: none;
             border-color: var(--primary);
+            background: white;
         }
 
         .form-divider {
@@ -451,66 +453,37 @@
             background: var(--primary);
             color: white;
         }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-        }
+        .btn-primary:hover { background: var(--primary-dark); }
 
         .btn-success {
             background: #2e7d32;
             color: white;
         }
-
-        .btn-success:hover {
-            background: #1b5e20;
-        }
+        .btn-success:hover { background: #1b5e20; }
 
         .btn-warning {
             background: var(--secondary);
             color: white;
         }
-
-        .btn-warning:hover {
-            background: #e65100;
-        }
+        .btn-warning:hover { background: #e65100; }
 
         .btn-info {
             background: #00838f;
             color: white;
         }
-
-        .btn-info:hover {
-            background: #006064;
-        }
+        .btn-info:hover { background: #006064; }
 
         .btn-danger {
             background: #c62828;
             color: white;
         }
-
-        .btn-danger:hover {
-            background: #b71c1c;
-        }
+        .btn-danger:hover { background: #b71c1c; }
 
         .btn-secondary {
             background: #78909c;
             color: white;
         }
-
-        .btn-secondary:hover {
-            background: #546e7a;
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-        }
-
-        .btn-outline:hover {
-            background: var(--primary);
-            color: white;
-        }
+        .btn-secondary:hover { background: #546e7a; }
 
         .btn-sm {
             padding: 5px 12px;
@@ -539,11 +512,7 @@
             box-shadow: 0 6px 20px rgba(0,0,0,0.1);
         }
 
-        .stat-card .stat-icon {
-            font-size: 24px;
-            margin-bottom: 4px;
-        }
-
+        .stat-card .stat-icon { font-size: 24px; margin-bottom: 4px; }
         .stat-card .stat-label {
             font-size: 12px;
             color: #888;
@@ -551,14 +520,12 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .stat-card .stat-number {
             font-size: 28px;
             font-weight: 700;
             color: var(--primary);
             margin: 2px 0;
         }
-
         .stat-card .stat-change {
             font-size: 11px;
             color: #2e7d32;
@@ -572,8 +539,6 @@
         .stat-card.purple .stat-number { color: #6a1b9a; }
         .stat-card.red { border-left-color: #c62828; }
         .stat-card.red .stat-number { color: #c62828; }
-        .stat-card.teal { border-left-color: #00695c; }
-        .stat-card.teal .stat-number { color: #00695c; }
 
         /* ===== CHARTS ===== */
         .chart-container {
@@ -648,7 +613,6 @@
         .bar-fill.orange { background: linear-gradient(90deg, #e65100, #f57c00); }
         .bar-fill.purple { background: linear-gradient(90deg, #4a148c, #6a1b9a); }
         .bar-fill.red { background: linear-gradient(90deg, #b71c1c, #c62828); }
-        .bar-fill.teal { background: linear-gradient(90deg, #004d40, #00695c); }
 
         /* ===== TABLES ===== */
         .table-container {
@@ -728,14 +692,8 @@
             background: white;
         }
 
-        .search-bar input {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .search-bar select {
-            min-width: 150px;
-        }
+        .search-bar input { flex: 1; min-width: 200px; }
+        .search-bar select { min-width: 150px; }
 
         /* ===== MODAL ===== */
         .modal {
@@ -752,9 +710,7 @@
             backdrop-filter: blur(4px);
         }
 
-        .modal.active {
-            display: flex;
-        }
+        .modal.active { display: flex; }
 
         .modal-content {
             background: white;
@@ -820,178 +776,9 @@
             margin-top: 4px;
         }
 
-        .file-upload-area input {
-            display: none;
-        }
+        .file-upload-area input { display: none; }
 
-        /* ===== MOBILE ===== */
-        .menu-toggle {
-            display: none;
-            position: fixed;
-            top: 14px;
-            left: 14px;
-            z-index: 1001;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-        }
-
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.4);
-            z-index: 999;
-        }
-
-        .sidebar-overlay.active {
-            display: block;
-        }
-
-        @media (max-width: 768px) {
-            .menu-toggle {
-                display: block;
-            }
-
-            .sidebar {
-                transform: translateX(-100%);
-                width: 280px;
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 14px;
-                padding-top: 65px;
-            }
-
-            .topbar {
-                flex-direction: column;
-                gap: 10px;
-                align-items: flex-start;
-                padding: 14px 18px;
-            }
-
-            .topbar .topbar-actions {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .form-row {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 4px;
-            }
-
-            .form-row .label {
-                min-width: auto;
-                font-size: 13px;
-            }
-
-            .form-row .field .date-group {
-                flex-wrap: wrap;
-            }
-
-            .form-row .field input[type="number"] {
-                width: 55px;
-            }
-
-            .checkbox-group,
-            .radio-group {
-                flex-direction: column;
-                gap: 6px;
-            }
-
-            .dashboard-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
-            }
-
-            .chart-container {
-                grid-template-columns: 1fr;
-            }
-
-            .form-actions {
-                flex-direction: column;
-            }
-
-            .form-actions .btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .search-bar {
-                flex-direction: column;
-            }
-
-            .search-bar input,
-            .search-bar select {
-                width: 100%;
-            }
-
-            .stat-card .stat-number {
-                font-size: 22px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .form-body {
-                padding: 14px 16px;
-            }
-
-            .card {
-                padding: 16px 18px;
-            }
-
-            .modal-content {
-                padding: 20px;
-            }
-        }
-
-        /* ===== SCROLLBAR ===== */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f0f2f5;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
-        }
-
-        /* ===== UTILITY ===== */
-        .text-center { text-align: center; }
-        .text-muted { color: #999; }
-        .mt-10 { margin-top: 10px; }
-        .mb-10 { margin-bottom: 10px; }
-        .flex { display: flex; }
-        .flex-center { display: flex; align-items: center; gap: 8px; }
-        .gap-5 { gap: 5px; }
-        .gap-10 { gap: 10px; }
-
-        /* ===== REPORT OUTPUT ===== */
+        /* ===== REPORT ===== */
         .report-output {
             background: #f8f9fc;
             padding: 20px;
@@ -1033,6 +820,97 @@
             color: #888;
             margin-top: 2px;
         }
+
+        /* ===== MOBILE ===== */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 14px;
+            left: 14px;
+            z-index: 1001;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 999;
+        }
+
+        .sidebar-overlay.active { display: block; }
+
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+            .sidebar.open { transform: translateX(0); }
+            .main-content {
+                margin-left: 0;
+                padding: 14px;
+                padding-top: 65px;
+            }
+            .topbar {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+                padding: 14px 18px;
+            }
+            .topbar .topbar-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .form-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 4px;
+            }
+            .form-row .label { min-width: auto; }
+            .form-row .field .date-group { flex-wrap: wrap; }
+            .form-row .field input[type="number"] { width: 55px; }
+            .checkbox-group, .radio-group { flex-direction: column; gap: 6px; }
+            .dashboard-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .chart-container { grid-template-columns: 1fr; }
+            .form-actions { flex-direction: column; }
+            .form-actions .btn { width: 100%; justify-content: center; }
+            .search-bar { flex-direction: column; }
+            .search-bar input, .search-bar select { width: 100%; }
+            .stat-card .stat-number { font-size: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .form-body { padding: 14px 16px; }
+            .card { padding: 16px 18px; }
+            .modal-content { padding: 20px; }
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f0f2f5; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
+
+        .text-center { text-align: center; }
+        .text-muted { color: #999; }
+        .mt-10 { margin-top: 10px; }
+        .mb-10 { margin-bottom: 10px; }
+        .flex { display: flex; }
+        .flex-center { display: flex; align-items: center; gap: 8px; }
+        .gap-5 { gap: 5px; }
+        .gap-10 { gap: 10px; }
     </style>
 </head>
 <body>
@@ -1105,31 +983,26 @@
                         <div class="stat-icon">📅</div>
                         <div class="stat-label">Atendimentos Hoje</div>
                         <div class="stat-number" id="hojeCount">0</div>
-                        <div class="stat-change">⬆️ Atualizado</div>
                     </div>
                     <div class="stat-card green">
                         <div class="stat-icon">📆</div>
                         <div class="stat-label">Atendimentos no Mês</div>
                         <div class="stat-number" id="mesCount">0</div>
-                        <div class="stat-change">📈 Este mês</div>
                     </div>
                     <div class="stat-card orange">
                         <div class="stat-icon">📊</div>
                         <div class="stat-label">Atendimentos no Ano</div>
                         <div class="stat-number" id="anoCount">0</div>
-                        <div class="stat-change">📈 Este ano</div>
                     </div>
                     <div class="stat-card purple">
                         <div class="stat-icon">👥</div>
                         <div class="stat-label">Total de Cadastros</div>
                         <div class="stat-number" id="totalCount">0</div>
-                        <div class="stat-change">📋 Registros</div>
                     </div>
                     <div class="stat-card red">
                         <div class="stat-icon">👤</div>
                         <div class="stat-label">Pessoas Únicas</div>
                         <div class="stat-number" id="pessoasUnicas">0</div>
-                        <div class="stat-change">🔍 Atendidas</div>
                     </div>
                 </div>
 
@@ -1471,6 +1344,7 @@
             document.getElementById('menuPessoas').textContent = dados.cadastros.length;
             document.getElementById('totalCadastros').textContent = dados.cadastros.length;
             document.getElementById('totalAtendimentos').textContent = dados.atendimentos.length;
+            document.getElementById('totalPessoas').textContent = dados.cadastros.length;
         }
 
         // ============================================
@@ -1514,15 +1388,32 @@
                 return;
             }
 
+            const endereco = document.getElementById('endereco').value.trim();
+            if (!endereco) {
+                alert('⚠️ Preencha o endereço.');
+                document.getElementById('endereco').focus();
+                return;
+            }
+
             const dia = document.getElementById('dataDia').value;
             const mes = document.getElementById('dataMes').value;
             const ano = document.getElementById('dataAno').value || '2026';
             const dataAtendimento = formatarDataParaInput(dia, mes, ano);
 
+            if (!dia || !mes || !ano) {
+                alert('⚠️ Preencha a data de atendimento completa.');
+                return;
+            }
+
             const nDia = document.getElementById('nascDia').value;
             const nMes = document.getElementById('nascMes').value;
             const nAno = document.getElementById('nascAno').value;
             const dataNascimento = formatarDataParaInput(nDia, nMes, nAno);
+
+            if (!nDia || !nMes || !nAno) {
+                alert('⚠️ Preencha a data de nascimento completa.');
+                return;
+            }
 
             // Tipo atendimento
             let tipoAtendimento = '';
@@ -1565,6 +1456,14 @@
 
             const assunto = assuntosSelecionados.join('; ');
 
+            // Extrair cidade do endereço
+            let cidade = 'Não informado';
+            const partesEndereco = endereco.split(',');
+            if (partesEndereco.length > 0) {
+                cidade = partesEndereco[partesEndereco.length - 1].trim();
+                if (!cidade) cidade = 'Não informado';
+            }
+
             const cadastro = {
                 id: Date.now(),
                 data: dataAtendimento,
@@ -1575,8 +1474,8 @@
                 genero: 'Não informado',
                 responsavel: responsavel,
                 telefone: document.getElementById('telefone').value.trim(),
-                endereco: document.getElementById('endereco').value.trim(),
-                cidade: document.getElementById('endereco').value.trim().split(',').pop().trim() || 'Não informado',
+                endereco: endereco,
+                cidade: cidade,
                 assunto: assunto,
                 tipoAtendimento: tipoAtendimento || tipoAtendimento2 || 'Presencial',
                 observacao: document.getElementById('observacao').value.trim(),
@@ -1643,7 +1542,7 @@
                         <td><strong>${c.nome}</strong></td>
                         <td>${c.nascimentoExibicao || formatarDataExibicao(c.nascimento)}</td>
                         <td>${c.responsavel}</td>
-                        <td><span class="status-badge atendido">${c.assunto}</span></td>
+                        <td><span class="status-badge atendido">${c.assunto.length > 30 ? c.assunto.substring(0, 30)+'…' : c.assunto}</span></td>
                         <td>${c.cidade}</td>
                         <td>
                             <button class="btn btn-danger btn-sm" onclick="excluirCadastro(${c.id})">🗑️</button>
@@ -1662,7 +1561,7 @@
                     <tr>
                         <td>${a.dataExibicao || formatarDataExibicao(a.data)}</td>
                         <td><strong>${a.nome}</strong></td>
-                        <td><span class="status-badge andamento">${a.assunto}</span></td>
+                        <td><span class="status-badge andamento">${a.assunto.length > 30 ? a.assunto.substring(0, 30)+'…' : a.assunto}</span></td>
                         <td>${a.tipo || 'Presencial'}</td>
                         <td>${a.cidade}</td>
                         <td><span class="status-badge atendido">${a.status || 'Atendido'}</span></td>
@@ -1790,7 +1689,9 @@
             dados.atendimentos.forEach(a => {
                 const assuntosList = a.assunto.split('; ');
                 assuntosList.forEach(ass => {
-                    assuntos[ass] = (assuntos[ass] || 0) + 1;
+                    if (ass.trim()) {
+                        assuntos[ass.trim()] = (assuntos[ass.trim()] || 0) + 1;
+                    }
                 });
             });
             const sortedAssuntos = Object.entries(assuntos).sort((a, b) => b[1] - a[1]).slice(0, 5);
@@ -1837,7 +1738,7 @@
                 const assuntosList = a.assunto.split('; ');
                 assuntosList.forEach(ass => {
                     if (termosViolacao.some(t => ass.includes(t))) {
-                        violacoes[ass] = (violacoes[ass] || 0) + 1;
+                        violacoes[ass.trim()] = (violacoes[ass.trim()] || 0) + 1;
                     }
                 });
             });
@@ -1913,7 +1814,9 @@
                 filtrados.forEach(a => {
                     const assuntosList = a.assunto.split('; ');
                     assuntosList.forEach(ass => {
-                        assuntos[ass] = (assuntos[ass] || 0) + 1;
+                        if (ass.trim()) {
+                            assuntos[ass.trim()] = (assuntos[ass.trim()] || 0) + 1;
+                        }
                     });
                     cidades[a.cidade] = (cidades[a.cidade] || 0) + 1;
                     tipos[a.tipo || 'Presencial'] = (tipos[a.tipo || 'Presencial'] || 0) + 1;
@@ -1968,7 +1871,9 @@
             dados.atendimentos.forEach(a => {
                 const assuntosList = a.assunto.split('; ');
                 assuntosList.forEach(ass => {
-                    assuntos[ass] = (assuntos[ass] || 0) + 1;
+                    if (ass.trim()) {
+                        assuntos[ass.trim()] = (assuntos[ass.trim()] || 0) + 1;
+                    }
                 });
             });
 
